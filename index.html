@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Progetto Sensore Qualità Aria</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="stile.css">
+</head>
+
+<body>
+
+    <div id="login-box">
+        <h2>Accesso al sito</h2>
+        <input type="password" id="password" placeholder="Inserisci password">
+        <button onclick="controllaPassword()">Entra</button>
+    </div>
+
+    <div id="contenuto-sito" style="display:none;">
+
+        <header>
+            <h1>SISTEMA DI MONITORAGGIO DELL'ARIA INDOOR</h1>
+            <nav>
+                <a href="#descrizione">Descrizione</a>
+                <a href="#componenti">Componenti</a>
+                <a href="#hardware">Hardware</a>
+                <a href="#software">Software</a>
+                <a href="#realizzazione">Realizzazione</a>
+                <a href="#difficolta">Difficoltà</a>
+                <a href="#foto">Foto</a>
+            </nav>
+        </header>
+
+        <section id="descrizione" class="hidden">
+            <h2>Descrizione del progetto</h2>
+
+            <div class="sezione-doppia">
+                <div class="meta-sinistra">
+
+                    <p>
+                        Questo progetto è stato realizzato per controllare la qualità dell’aria in un ambiente chiuso
+                        e capire se sono presenti sostanze che possono influire sulla salute.
+                        Il sistema rileva i dati in tempo reale e permette di visualizzarli in modo semplice e
+                        immediato.
+                    </p>
+
+                    <p>
+                        Durante la realizzazione abbiamo unito elettronica e programmazione,
+                        mettendo in pratica conoscenze tecniche per creare un sistema funzionante
+                        utile al monitoraggio ambientale.
+                    </p>
+
+                </div>
+                <div class="meta-destra">
+                    <img src="descrizione.jpeg" alt="Sensore MQ-135" width="300">
+                </div>
+            </div>
+
+        </section>
+
+        <section id="componenti" class="hidden">
+            <h2>Componenti utilizzati</h2>
+            <ul>
+                <li>
+                    Microcontrollore ESP32: ideale per applicazioni IoT. Dispone di un convertitore analogico-digitale
+                    (ADC) a 12 bit.
+                </li>
+                <li>
+                    Sensore MQ-135: sensore a ossido di metallo (MOX) progettato per rilevare la qualità generale
+                    dell'aria. È sensibile a gas come ammoniaca, benzene, alcol, fumo e anidride carbonica. Richiede un
+                    tempo di pre-riscaldamento per letture stabili.
+                </li>
+                <li>
+                    Ventola DC: utilizzato per “risucchiare” aria all’interno della scatola fornendo aria da poter far
+                    analizzare ai sensori rilevando i dati di gas e inquinamento.
+                </li>
+                <li>
+                    Display LCD 16x2: schermo alfanumerico in grado di visualizzare due righe da 16 caratteri ciascuna.
+                    È utilizzato per mostrare in tempo reale i valori rilevati dai sensori e lo stato del sistema.
+                    Dispone di 16 pin per il collegamento, che includono alimentazione (VSS, VDD), controllo contrasto
+                    (VO), pin di controllo (RS, RW, E) e pin dati (D0-D7).
+                </li>
+                <li>
+                    SGP30CO2: sensore digitale ad alta precisione che comunica tramite interfaccia I2C. Fornisce segnali
+                    pre-elaborati per composti organici volatili totali (TVOC) in ppb (parti per miliardo) e per l’eCO2
+                    in ppm (parti per milione).
+                </li>
+                <li>
+                    Transistor: necessario per gestire il motore della ventola.
+                </li>
+                <li>
+                    Resistenze: per limitare la corrente.
+                </li>
+                <li>
+                    Breadboard: per l’alloggiamento dei componenti (permette il prototipaggio rapido senza saldature).
+                </li>
+                <li>
+                    Cavi: per la realizzazione dei vari collegamenti.
+                </li>
+                <li>
+                    Alimentazione.
+                </li>
+
+            </ul>
+
+            <p>
+                Ci siamo aiutati anche con strumenti come saldatore, trapano e cacciavite.
+            </p>
+        </section>
+
+        <section id="vincoli e caratteristiche del sistema" class="hidden">
+            <h2>Vincoli e Caratteristiche del Sistema</h2>
+            <p>VINCOLI:</p>
+            <ul>
+                <li>Precisione dei sensori: i sensori di tipo MQ richiedono un tempo di pre-riscaldamento (warm-up)
+                    significativo per fornire letture stabili e sono soggetti a deriva termica e sensibilità crociata
+                    (possono reagire a gas diversi da quelli target).
+                </li>
+                <li>
+                    Calibrazione: il sistema necessita di una calibrazione periodica in aria pulita per mantenere
+                    l'accuratezza dei valori di CO2 e VOC (Composti Organici Volatili).
+                </li>
+            </ul>
+            <p>CARATTERISTICHE:</p>
+            <ul>
+                <li>
+                    Monitoraggio multi-parametrico: il sistema incrocia i dati analogici dell'MQ135 con quelli digitali
+                    dell'SGP30 per una visione completa degli inquinanti indoor.
+                </li>
+                <li>
+                    Visualizzazione real-time: I dati vengono aggiornati costantemente sul display LCD, permettendo
+                    all'utente una lettura immediata.
+                </li>
+            </ul>
+        </section>
+
+        <section id="hardware" class="hidden">
+            <h2>Parte hardware</h2>
+
+            <div class="sezione-doppia">
+                <div class="meta-sinistra">
+                    <p>
+                        Per realizzare la parte hardware del progetto abbiamo usato diversi componenti elettronici
+                        collegati
+                        tra loro. Il componente principale è ESP32-WROOM-32, che funziona come microcontrollore e
+                        gestisce
+                        tutto il sistema.
+                    </p>
+                    <p>
+                        Per rilevare la qualità dell’aria abbiamo utilizzato il sensore MQ-135 Gas Sensor Module, che
+                        permette di misurare la presenza di gas nell’ambiente.
+
+                        Abbiamo poi collegato un display, utile per vedere in tempo reale i dati rilevati dal sensore:
+                        sullo
+                        schermo compare la percentuale del gas e dell'inquinamento dell'aria (CO2 e TVOC).
+
+                        Per realizzare i collegamenti abbiamo usato breadboard, cavi e resistenze, in modo da montare il
+                        circuito in maniera ordinata.
+                    </p>
+                    <p>
+                        Infine abbiamo aggiunto una ventola, che serve per cambiare l'aria e avere dati sempre
+                        aggiornati.
+                    </p>
+                </div>
+                <div class="meta-destra">
+                    <img src="hardware.jpg" alt="parte hardware" width="300">
+                </div>
+            </div>
+        </section>
+
+        <section id="software" class="hidden">
+            <h2>Parte software</h2>
+
+            <div class="sezione-doppia">
+                <div class="meta-destra immagini-verticali">
+                    <img src="codice1.jpeg" alt="parte software 1" width="350">
+                    <img src="codice2.jpeg" alt="parte software 2" width="350">
+                    <img src="codice 3.jpeg" alt="parte software 3" width="350">
+                    <img src="codice4.jpeg" alt="parte software 4" width="350">
+                    <img src="codice5.jpeg" alt="parte software 5" width="350">
+                </div>
+
+                <div class="meta-sinistra">
+                    <p>
+                        Il codice gestisce due sensori principali: l'MQ135 per i gas generici e l'SGP30 per la qualità
+                        dell'aria indoor (CO2 e composti organici volatili).
+                        Per il funzionamento di questi due sensori sono state utilizzate le librerie Wire e
+                        Adafruit_SGP30
+                        per la comunicazione I2C e la libreria LiquidCrystal per l'interfaccia visiva.
+                    </p>
+                    <p>
+                        Nella fase di setup(), oltre a inizializzare il display, è stata inserita una fase di
+                        riscaldamento,
+                        fondamentale affinché i sensori raggiungano una temperatura stabile necessaria per fornire
+                        letture
+                        precise.
+                    </p>
+                    <p>
+                        I dati grezzi rilevati dai sensori vengono convertiti in percentuali tramite la funzione map(),
+                        con
+                        soglie basate su standard ambientali dove il 100% rappresenta il limite di sicurezza.
+                        Per l'inquinamento dell'aria si è scelto di visualizzare il valore massimo tra CO2 e TVOC: si
+                        tratta
+                        di una scelta cautelativa, poiché se anche uno solo dei due parametri è critico, il sistema deve
+                        segnalare il pericolo immediatamente, senza "nasconderlo" in una media matematica.
+                    </p>
+                    <p>
+                        Il display mostra nella prima riga i dati espressi in percentuale di inquinamento dell’aria
+                        (estratto come valore massimo cautelativo tra CO2 e TVOC) e gas.
+                        Nella seconda riga, viene fatta visualizzare una barra grafica a tre livelli e un’etichetta
+                        testuale
+                        relativi alla qualità complessiva dell’aria, in modo tale da fornire un feedback immediato.
+                        Questo approccio permette all'utente di monitorare l'ambiente in modo intuitivo, facilitando
+                        decisioni rapide sull'aerazione dell’ambiente senza dover interpretare unità di misura
+                        complesse.
+                    </p>
+                    <p>
+                        Infine, la funzione inviaDebugSeriale trasmette i dati completi al PC, permettendo di monitorare
+                        l'andamento preciso dei gas in ppm (parti per milione) e ppb (parti per miliardo) per la
+                        calibrazione delle soglie.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section id="software-librerie" class="hidden">
+            <h2>Parte Software: Librerie</h2>
+            <ul>
+                <li>
+                    Wire.h: implementa il protocollo I2C, uno standard di comunicazione seriale sincrona. È il driver
+                    necessario per stabilire la connessione tra la scheda e il sensore SGP30 utilizzando solo due pin
+                    (SDA e SCL), ottimizzando così i collegamenti.
+                </li>
+                <li>
+                    Adafruit_SGP30.h: gestisce l'inizializzazione del sensore e l'auto-calibrazione. Implementa
+                    l'algoritmo necessario per convertire le variazioni di resistenza elettrica rilevate dal chip in
+                    valori digitali di eCO2 e TVOC.
+                </li>
+                <li>
+                    LiquidCrystal.h: funge da interfaccia tra il microcontrollore e il display. Permette di gestire
+                    l'output visivo in modo efficiente, formattando i dati in stringhe di testo e simboli grafici
+                    leggibili.
+                </li>
+            </ul>
+        </section>
+
+        <section id="software: conversione" class="hidden">
+            <h2>Parte Software: Conversione</h2>
+            <p> La conversione in percentuale non è arbitraria, ma è tarata su standard normativi di salute indoor. Il
+                100% rappresenta il punto in cui la concentrazione di inquinanti richiede un intervento immediato
+                (aprire le finestre o attivare la ventilazione). </p>
+            <p>La conversione dai dati grezzi rilevati a valori in percentuale segue questo schema:</p>
+            <ul>
+                <li>Definizione dei range: sono stati stabiliti per ogni sensore un valore di Minimo (aria pulita) e un
+                    valore di Massimo (soglia di pericolo).</li>
+                <li>Protezione dei dati per evitare valori fuori scala: è stata utilizzata la funzione constrain() per
+                    bloccare i risultati entro l'intervallo stabilito, evitando che picchi improvvisi di inquinamento
+                    creino errori</li>
+                <li>3. Proporzione matematica: la funzione map() riproporziona il valore letto tra questi due estremi in
+                    una scala da 0 a 100.</li>
+            </ul>
+            <p>Valori di conversione:</p>
+            <ul>
+                <li>Per la CO2 (eCO2) ci siamo basati sugli standard ASHRAE e ISS: <ul>
+                        <li>400 ppm corrisponde al livello base dell’aria esterna (0%).</li>
+                        <li>Tra 1000 e 1200 ppm c’è il limite consigliato per scuole e uffici.</li>
+                        <li>2000 ppm è la soglia in cui possono comparire sonnolenza e mal di testa (100%).</li>
+                    </ul>
+                </li>
+                <li>Per i TVOC ci siamo basati sui livelli di comfort ambientale: <ul>
+                        <li>Da 0 a 220 ppb l’aria è considerata eccellente.</li>
+                        <li>2200 ppb è il limite oltre il quale l’aria diventa satura di inquinanti chimici, come
+                            vernici, fumo e detergenti, e può risultare irritante.</li>
+                    </ul>
+                </li>
+                <li>Per il Gas (MQ135) ci siamo basati sulla sensibilità del sensore: <ul>
+                        <li>Il valore minimo (GAS_MIN) è stato impostato sul valore letto in una stanza pulita.</li>
+                        <li>Il valore massimo (GAS_MAX) è stato definito in base alla risposta del sensore in presenza
+                            di fumo o gas infiammabili.</li>
+                    </ul>
+                </li>
+            </ul>
+        </section>
+
+        <section id="software-tabella" class="hidden">
+            <h2>Parte Software: Legenda Dei Livelli Di inquinamento e Qualità Dell'Aria</h2>
+            <img src="tabella.png" alt="tabella" width="850">
+        </section>
+
+        <section id="realizzazione" class="hidden">
+            <h2>Realizzazione e Architettura</h2>
+
+            <p>
+                Il sistema è stato progettato come un ecosistema integrato in cui ogni componente collabora per
+                garantire una lettura accurata.
+                Una ventola DC, pilotata tramite un transistor, convoglia attivamente l’aria verso il cuore del
+                dispositivo per un campionamento costante.
+                La cooperazione tra il sensore analogico MQ135 e il sensore digitale SGP30 permette di incrociare i dati
+                su gas generici, CO2 e TVOC. Il coordinamento è affidato al microcontrollore ESP32, che elabora i
+                segnali e restituisce i risultati in tempo reale sul display LCD.
+            </p>
+            <p>Di seguito è riportato l’approccio costruttivo:</p>
+            <ul>
+                <li>
+                    Campionamento attivo: utilizzo di una ventola con gestione a transistor per forzare il ricircolo
+                    dell'aria sui sensori.
+                </li>
+                <li>
+                    Rilevamento: combinazione di tecnologia analogica (MQ135) e digitale I2C (SGP30) per un monitoraggio
+                    multi-parametrico.
+                </li>
+                <li>
+                    Elaborazione dati: sfruttamento dell'ADC a 12 bit dell'ESP32 per un'elevata risoluzione nella
+                    lettura dei segnali.
+                </li>
+                <li>
+                    Interfaccia utente: visualizzazione immediata dei parametri critici tramite schermo alfanumerico
+                    16x2.
+                </li>
+                <li>
+                    Prototipazione rapida: assemblaggio su breadboard con cablaggi ottimizzati e resistenze di
+                    protezione per la massima stabilità elettrica.
+                </li>
+            </ul>
+        </section>
+
+        <section id="difficolta" class="hidden">
+            <h2>Difficoltà riscontrate</h2>
+
+            <p>
+                Durante lo sviluppo del prototipo le difficoltà principali sono state il collegamento dei cavi e la
+                calibrazione dei sensori.
+
+                Il cablaggio sulla breadboard ha richiesto molta attenzione, soprattutto per il numero elevato di
+                collegamenti necessari tra sensori, display e microcontrollore, per evitare errori e falsi contatti.
+
+                Anche la calibrazione dei sensori è stata una fase delicata, perché ha richiesto la ricerca e
+                definizione delle soglie minime e massime rilevate dai sensori.
+
+            </p>
+
+
+            <section id="foto" class="hidden">
+                <h2>Foto del progetto</h2>
+                <div class="galleria">
+                    <img src="altrefoto1.jpeg" width="200" alt="arduino">
+                    <img src="displaypasquale.jpg" width="200" alt="pasquini ( e display)">
+                    <img src="foto-parte-hardware.jpg" width="200" alt="hardware">
+                    <img src="descrizione.jpeg" width="200" alt="descrizione">
+                </div>
+            </section>
+
+            <footer>
+                <p>Progetto realizzato da Vitaloni Giacomo, Dapporto Sophia, Pasquini Diego, Sebastianelli Leonardo,
+                    Spontella Alessia</p>
+            </footer>
+
+    </div>
+
+    <script>
+        const hiddenSections = document.querySelectorAll('section.hidden');
+
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('show');
+                } else {
+                    entry.target.classList.remove('show');
+                }
+            });
+        });
+
+        hiddenSections.forEach(section => observer.observe(section));
+    </script>
+
+    <script>
+        function controllaPassword() {
+            const password = document.getElementById("password").value;
+
+            if (password === "pcto2026!") {
+                document.getElementById("login-box").style.display = "none";
+                document.getElementById("contenuto-sito").style.display = "block";
+            } else {
+                alert("Password errata");
+            }
+        }
+    </script>
+
+</body>
+
+</html>
